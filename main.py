@@ -1,6 +1,8 @@
 from typing import Union
-
 from fastapi import FastAPI
+from fastapi.templating import Jinja2Templates
+
+templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
 
@@ -10,6 +12,6 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get('/')
+async def home(request: Request):
+    return templates.TemplateResponse(request=request, name="index.html", context={"request": request})
